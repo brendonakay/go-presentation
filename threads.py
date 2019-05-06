@@ -33,4 +33,4 @@ if __name__ == '__main__':
     start_time = time.time()
     transform_csv()
     end_time = time.time() - start_time
-    print(f"\n{end_time} seconds")
+    sys.stderr.write(f"\n{end_time} seconds\n")

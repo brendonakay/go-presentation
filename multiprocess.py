@@ -1,11 +1,11 @@
 import csv
-import multiprocessing
+import multiprocessing as mp
+import os
 import re
 import sys
 import time
 from datetime import datetime
 from functools import partial
-
 
 def print_edited_line(lock, line):
     # name = multiprocessing.current_process().name
@@ -14,7 +14,7 @@ def print_edited_line(lock, line):
     line[2] = line[2].upper()
 
     with lock:
-        # print(f'{name}: ' + '|'.join(line))
+        # print(f'{os.getpid()}: ' + '|'.join(line))
         print('|'.join(line))
         sys.stdout.flush()
 
@@ -26,9 +26,9 @@ def transform_csv():
         # Remove header
         _ = next(reader)
 
-        lock = multiprocessing.Manager().Lock()
+        lock = mp.Manager().Lock()
         p = partial(print_edited_line, lock)
-        with multiprocessing.Pool() as pool:
+        with mp.Pool() as pool:
             pool.map(p, reader)
 
 
@@ -36,4 +36,4 @@ if __name__ == '__main__':
     start_time = time.time()
     transform_csv()
     end_time = time.time() - start_time
-    print(f"\n{end_time} seconds")
+    sys.stderr.write(f"\n{end_time} seconds\n")
