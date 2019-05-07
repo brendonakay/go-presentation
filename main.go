@@ -5,27 +5,27 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"os"
 	"io"
+	"os"
 	//"sync"
-	"time"
 	"encoding/csv"
+	"time"
 )
 
 func main() {
-    csvFile, _ := os.Open("the.csv")
-    reader := csv.NewReader(bufio.NewReader(csvFile))
+	csvFile, _ := os.Open("the.csv")
+	reader := csv.NewReader(bufio.NewReader(csvFile))
 
-    for {
-        line, error := reader.Read()
-        if error == io.EOF {
-            break
-        } else if error != nil {
+	for {
+		line, error := reader.Read()
+		if error == io.EOF {
+			break
+		} else if error != nil {
 			fmt.Println("lol")
-        }
+		}
 		c := function(line)
 		fmt.Println(<-c)
-    }
+	}
 
 	//c := fanIn(function("foo"), function("bar"))
 
@@ -36,14 +36,14 @@ func main() {
 }
 
 func gen(lines ...[]string) <-chan []string {
-    out := make(chan []string)
-    go func() {
-        for _, n := range lines {
-            out <- n
-        }
-        close(out)
-    }()
-    return out
+	out := make(chan []string)
+	go func() {
+		for _, n := range lines {
+			out <- n
+		}
+		close(out)
+	}()
+	return out
 }
 
 func function(msg []string) <-chan string { // Returns receive only channel of strings
